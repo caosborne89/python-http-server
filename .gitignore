@@ -1,0 +1,5 @@
+# Webroot directory
+/www
+
+# Python related files
+__pycache__
