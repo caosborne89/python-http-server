@@ -5,11 +5,11 @@ import datetime
 import mimetypes
 import sys
 
-def open_conn():
-    HOST = ""
-    PORT = 8080
-    WEB_ROOT = "./www"
+HOST = ""
+PORT = 8080
+WEB_ROOT = "./www"
 
+def open_conn():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # setsockopt must be called before s.bind
         # socket.SO_REUSEADDR will keep the address and port free  after the program exits
@@ -26,7 +26,7 @@ def open_conn():
                 conn.sendall(HTTPResponse(WEB_ROOT, req.get_path()).get_raw_response())
 
 def main():
-    print("Listening on localhost:8080...")
+    print(f"Listening on {HOST if HOST else "localhost"}:{PORT}...")
     # Without this while loop, the socket will close when the use closes their browser
     # and the program will end.
     while True:
