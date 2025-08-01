@@ -8,12 +8,12 @@ class HTTPResponse():
         self.status = "500 Internal Server Error"
 
     def set_file_path(self, webroot, path):
-        file_path = webroot + path
+        file_path = bytes(webroot, "utf-8") + path
 
-        if re.match(r'^(?!.*\.\w+$).*', file_path):
+        if re.match(b'^(?!.*\\.\\w+$).*', file_path):
             if path[-1] == '/':
-                return file_path + "index.html"
-            return file_path + "/index.html"
+                return file_path + b'index.html'
+            return file_path + b'/index.html'
         return file_path
 
     def get_raw_response(self):

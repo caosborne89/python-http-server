@@ -23,7 +23,7 @@ def open_conn():
     def read(conn, mask):
         data = conn.recv(1024)
         if data:
-            req = HTTPRequest(data.decode("utf-8"))
+            req = HTTPRequest(data)
             conn.send(HTTPResponse(WEB_ROOT, req.get_path()).get_raw_response())
         else:
             sel.unregister(conn)
