@@ -1,12 +1,20 @@
 import re
+from http_error import HTTPBadRequestError
 
 class HTTPRequest():
     def __init__(self, data):
         self.set_properties(data)
+        self.headers = {}
+        self.invalid_request = False
+        self.invalid_request_error_message = ""
 
     def set_properties(self, data):
 
         lines = data.split(b'\r\n')
+        # Check for bare CR in lines
+        for line in lines:
+            if b'\r' in line:
+                raise HTTPBadRequestError
 
         req_line = lines.pop(0)
         req_line = req_line.split(b' ')
@@ -25,3 +33,4 @@ class HTTPRequest():
 
     def get_path(self):
         return self.path
+

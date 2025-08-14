@@ -6,6 +6,7 @@ import mimetypes
 import sys
 import selectors
 
+from http_error import HTTPError
 
 HOST = ""
 PORT = 8080
@@ -23,8 +24,12 @@ def open_conn():
     def read(conn, mask):
         data = conn.recv(1024)
         if data:
-            req = HTTPRequest(data)
-            conn.send(HTTPResponse(WEB_ROOT, req.get_path()).get_raw_response())
+            try:
+                req = HTTPRequest(data)
+                conn.send(HTTPResponse(WEB_ROOT, path=req.get_path()).get_raw_response())
+            except HTTPError as e:
+                conn.send(HTTPResponse(WEB_ROOT, status=e.status, html=e.response_html()).get_raw_response())
+
         else:
             sel.unregister(conn)
             conn.close()
